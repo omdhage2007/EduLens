@@ -1,0 +1,52 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuth() { return request.auth != null; }
+    function isTeacher() {
+      return isAuth() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['teacher', 'admin'];
+    }
+
+    // Users — read own, write own
+    match /users/{uid} {
+      allow read: if isAuth();
+      allow write: if isAuth() && request.auth.uid == uid;
+    }
+
+    // Students — teachers write, all auth read
+    match /students/{id} {
+      allow read: if isAuth();
+      allow write: if isTeacher();
+    }
+
+    // Attendance — teachers write, students read own
+    match /attendance/{id} {
+      allow read: if isAuth();
+      allow write: if isTeacher();
+    }
+
+    // Assignments — teachers write, students read own
+    match /assignments/{id} {
+      allow read: if isAuth();
+      allow write: if isAuth();
+    }
+
+    // Alerts — teachers write, all read
+    match /alerts/{id} {
+      allow read: if isAuth();
+      allow write: if isTeacher();
+    }
+
+    // Question papers
+    match /questionPapers/{id} {
+      allow read: if isAuth();
+      allow write: if isTeacher();
+    }
+
+    // Answer sheets
+    match /answerSheets/{id} {
+      allow read: if isAuth();
+      allow write: if isAuth();
+    }
+  }
+}
