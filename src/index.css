@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@theme {
+  --font-syne: "Syne", sans-serif;
+  --font-instrument: "Instrument Sans", sans-serif;
+  
+  --color-bg: #050a12;
+  --color-surface: #0b1220;
+  --color-card: #0f1a2e;
+  --color-accent: #38bdf8;
+  --color-accent2: #818cf8;
+  --color-accent3: #34d399;
+}
+
+@layer base {
+  body {
+    @apply bg-bg text-white font-instrument;
+  }
+}
+
+.font-syne {
+  font-family: var(--font-syne);
+}
+
+.font-instrument {
+  font-family: var(--font-instrument);
+}
+
+.symbols-container {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.symbol {
+  position: absolute;
+  bottom: -50px;
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.4);
+  animation: floatUp 6s linear infinite;
+  user-select: none;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.4;
+  }
+  80% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(-110vh);
+    opacity: 0;
+  }
+}
